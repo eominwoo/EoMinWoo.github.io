@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미래자동차 공학과 대학 찾기</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inter 폰트 적용 */
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div id="app" class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 w-full max-w-4xl flex flex-col items-center">
+
+        <!-- Header Section -->
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 text-center">
+            미래자동차 공학과 대학 찾기 🚗
+        </h1>
+        <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
+            미래 모빌리티 시대를 이끌어갈 인재를 양성하는 대학과 학과 정보를 찾아보고, 입학 준비를 위한 가이드를 확인하세요.
+        </p>
+
+        <!-- University List View -->
+        <div id="university-list-view" class="w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">주요 대학 목록</h2>
+            <div id="universities-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- University cards will be injected here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Department Detail View (Initially hidden) -->
+        <div id="department-detail-view" class="w-full hidden">
+            <button id="back-button" class="flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-6 p-2 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                대학 목록으로 돌아가기
+            </button>
+            <h2 id="department-name" class="text-3xl font-extrabold text-gray-900 mb-4 text-center"></h2>
+            <p id="university-name-detail" class="text-xl text-gray-600 mb-8 text-center"></p>
+
+            <div class="space-y-8">
+                <!-- 학과 소개 -->
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md border border-blue-200">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        학과 소개
+                    </h3>
+                    <p id="dept-intro" class="text-gray-700 leading-relaxed"></p>
+                </div>
+
+                <!-- 커리큘럼 -->
+                <div class="bg-green-50 p-6 rounded-lg shadow-md border border-green-200">
+                    <h3 class="text-2xl font-bold text-green-700 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        커리큘럼
+                    </h3>
+                    <p id="dept-curriculum" class="text-gray-700 leading-relaxed"></p>
+                </div>
+
+                <!-- 진로 및 전망 -->
+                <div class="bg-purple-50 p-6 rounded-lg shadow-md border border-purple-200">
+                    <h3 class="text-2xl font-bold text-purple-700 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        진로 및 전망
+                    </h3>
+                    <p id="dept-career" class="text-gray-700 leading-relaxed"></p>
+                    <p class="text-gray-700 mt-4"><strong class="text-purple-800">평균 급여 (연봉):</strong> <span id="dept-average-salary"></span></p>
+                </div>
+
+                <!-- 입학 준비 가이드 -->
+                <div class="bg-yellow-50 p-6 rounded-lg shadow-md border border-yellow-200">
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        입학 준비 가이드
+                    </h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li><strong class="text-yellow-800">필요한 고등학교 교과목:</strong> <span id="guide-subjects"></span></li>
+                        <li><strong class="text-yellow-800">관련 활동:</strong> <span id="guide-activities"></span></li>
+                        <li><strong class="text-yellow-800">필요한 역량:</strong> <span id="guide-competencies"></span></li>
+                        <li><strong class="text-yellow-800">농어촌 특별전형 (5등급제 예측):</strong> <span id="guide-rural-admission"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 대학 및 학과 데이터 (실제 서비스에서는 DB 또는 API에서 가져옴)
+        const universitiesData = [
+            {
+                id: 'uni1',
+                name: '서울대학교',
+                departments: [
+                    {
+                        id: 'dept1_1',
+                        name: '미래자동차 공학부',
+                        prepInfo: {
+                            intro: '서울대학교 미래자동차 공학부는 자율주행, 전기차, 스마트 모빌리티 등 미래 자동차 산업을 선도할 핵심 인재 양성을 목표로 합니다. 융합적인 사고와 실무 능력을 갖춘 전문가를 배출합니다.',
+                            curriculum: '주요 과목: 자동차 역학, 전력전자공학, 제어공학, 인공지능 기초, 머신러닝, 임베디드 시스템, 자율주행 소프트웨어 설계, 배터리 시스템 공학. 다양한 실험 및 실습, 캡스톤 디자인 프로젝트를 통해 실무 역량을 강화합니다.',
+                            career: '졸업 후 진로: 현대자동차, 기아, 제네시스, 르노코리아자동차, KG모빌리티 등 국내 완성차 기업; 현대모비스, 만도, 현대위아 등 자동차 부품 기업; 삼성SDI, LG에너지솔루션, SK온 등 배터리 및 소재 기업; 네이버랩스, 카카오모빌리티, 엔비디아, 테슬라 등 자율주행 및 AI 관련 IT 기업; 한국전자통신연구원(ETRI), 한국자동차연구원 등 국책 연구소; 그리고 다양한 미래 모빌리티 스타트업. 주요 직무로는 연구개발(R&D), 생산기술, 품질관리, 시험 및 평가, 소프트웨어 개발, 시스템 통합, 데이터 분석 등이 있습니다.',
+                            averageSalary: '초봉 5,000만원 이상, 경력에 따라 7,000만원 ~ 1억원 이상 (산업 및 기업 규모에 따라 상이)',
+                            admissionGuide: {
+                                subjects: '수학(미적분, 확률과 통계), 물리학, 화학, 정보/컴퓨터 과목은 필수적입니다.',
+                                activities: '과학 동아리, 로봇 동아리, 코딩 대회 참가, 미래자동차 관련 서적 독서, 관련 강연/세미나 참여.',
+                                competencies: '문제 해결 능력, 논리적 사고력, 창의성, 협업 능력, 영어 능력.',
+                                ruralAdmission: '농어촌 특별전형은 일반 전형에 비해 경쟁률이 낮을 수 있으나, 서울대학교의 경우 최상위권 학생들이 지원하므로 5등급제에서도 높은 내신 성적(예: 1등급 초중반)이 요구될 수 있습니다. 정확한 정보와 지난 입시 결과는 서울대학교 입학처 홈페이지를 통해 확인하시거나, 입학처에 직접 문의하시는 것이 가장 정확합니다.'
+                            }
+                        }
+                    },
+                    {
+                        id: 'dept1_2',
+                        name: '전기 및 정보공학부 (미래 모빌리티 트랙)',
+                        prepInfo: {
+                            intro: '전기 및 정보공학부의 미래 모빌리티 트랙은 전기차의 핵심인 전력전자, 모터 제어, 배터리 관리 시스템과 자율주행에 필요한 인공지능, 통신 기술을 중점적으로 다룹니다.',
+                            curriculum: '주요 과목: 회로이론, 전력전자, 제어 시스템, 디지털 신호 처리, 컴퓨터 비전, 무선 통신, 배터리 관리 시스템, 전기차 구동 시스템 설계.',
+                            career: '졸업 후 진로: 현대자동차, 기아, 테슬라 등 전기차 제조사; 삼성SDI, LG에너지솔루션, SK온 등 배터리 개발 및 생산 기업; NXP, 인피니언 등 전력 반도체 기업; KT, SK텔레콤 등 통신사 (V2X, 5G 모빌리티); 자율주행 솔루션 개발 스타트업. 주요 직무는 전력 시스템 설계, 임베디드 소프트웨어 개발, AI 알고리즘 개발, 통신 시스템 엔지니어링 등입니다.',
+                            averageSalary: '초봉 4,500만원 이상, 경력에 따라 6,000만원 ~ 1억원 이상 (전기차, 배터리, 소프트웨어 분야에 따라 상이)',
+                            admissionGuide: {
+                                subjects: '수학(미적분, 선형대수), 물리학, 정보/컴퓨터 과목이 중요합니다.',
+                                activities: '전자회로 제작 동아리, 프로그래밍 스터디, 전기차 관련 프로젝트 참여.',
+                                competencies: '수리적 분석 능력, 프로그래밍 능력, 시스템 설계 능력.',
+                                ruralAdmission: '농어촌 특별전형은 일반 전형에 비해 경쟁률이 낮을 수 있으나, 서울대학교의 경우 최상위권 학생들이 지원하므로 5등급제에서도 높은 내신 성적(예: 1등급 초중반)이 요구될 수 있습니다. 정확한 정보와 지난 입시 결과는 서울대학교 입학처 홈페이지를 통해 확인하시거나, 입학처에 직접 문의하시는 것이 가장 정확합니다.'
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'uni2',
+                name: '카이스트',
+                departments: [
+                    {
+                        id: 'dept2_1',
+                        name: '기계공학과 (미래 모빌리티 전공)',
+                        prepInfo: {
+                            intro: '카이스트 기계공학과의 미래 모빌리티 전공은 기계 시스템의 이해를 바탕으로 자율주행 로봇, 전기차 플랫폼, 드론 등 차세대 모빌리티 기술을 연구합니다.',
+                            curriculum: '주요 과목: 고체역학, 유체역학, 열역학, 동역학, 로봇 공학, 자율주행 제어, 차량 동역학, 센서 및 액추에이터.',
+                            career: '졸업 후 진로: 현대자동차, 기아 등 완성차 기업의 차량 설계 및 개발 부서; 보스턴 다이내믹스, 로봇티즈 등 로봇 개발 기업; 한화에어로스페이스, 한국항공우주산업 등 항공우주 산업; 자율주행 하드웨어 개발사; 첨단 기계 시스템 연구소. 직무는 차량 동역학 분석, 로봇 설계 및 제어, 센서 및 액추에이터 개발, 생산 자동화 시스템 구축 등입니다.',
+                            averageSalary: '초봉 5,500만원 이상, 경력에 따라 8,000만원 ~ 1억 2,000만원 이상 (첨단 로봇/모빌리티 분야는 더 높을 수 있음)',
+                            admissionGuide: {
+                                subjects: '수학(미적분, 선형대수), 물리학 심화, 정보/컴퓨터 과목이 필수적입니다.',
+                                activities: '로봇 제작 동아리, 3D 모델링 및 프린팅, 기계 설계 프로젝트 참여.',
+                                competencies: '공간 지각 능력, 문제 해결 능력, 창의적 설계 능력.',
+                                ruralAdmission: '카이스트는 일반 대학과는 다른 특수목적대학으로, 농어촌 특별전형 대신 별도의 입학 전형을 운영할 수 있습니다. 5등급제에서도 우수한 학업 성취도와 잠재력을 보여주는 것이 중요하며, 정확한 자격 요건과 평가 기준은 카이스트 입학처 홈페이지에서 최신 모집 요강을 반드시 확인하시거나, 입학처에 직접 문의해야 합니다.'
+                            }
+                        }
+                    },
+                    {
+                        id: 'dept2_2',
+                        name: '전기및전자공학부 (스마트 모빌리티 연구)',
+                        prepInfo: {
+                            intro: '카이스트 전기및전자공학부에서는 스마트 모빌리티를 위한 인공지능, 통신, 센서 기술을 연구하며, 특히 딥러닝 기반 자율주행 알고리즘 개발에 강점을 가집니다.',
+                            curriculum: '주요 과목: 디지털 신호 처리, 컴퓨터 아키텍처, 인공지능, 딥러닝, 통신 시스템, 센서 네트워크, 자율주행 시스템.',
+                            career: '졸업 후 진로: 구글 웨이모, 애플, 삼성전자, LG전자 등 IT 대기업의 자율주행/AI 부서; 엔비디아, 퀄컴 등 반도체 기업; 통신 장비 개발사; 자율주행 소프트웨어 전문 스타트업. 직무는 AI/딥러닝 엔지니어, 컴퓨터 비전 엔지니어, 통신 시스템 개발자, 센서 융합 전문가 등입니다.',
+                            averageSalary: '초봉 6,000만원 이상, 경력에 따라 9,000만원 ~ 1억 5,000만원 이상 (AI/소프트웨어 분야는 매우 높을 수 있음)',
+                            admissionGuide: {
+                                subjects: '수학(미적분, 선형대수, 확률과 통계), 정보/컴퓨터 과목이 중요합니다.',
+                                activities: '인공지능 스터디, 프로그래밍 경진대회, 데이터 분석 프로젝트 참여.',
+                                competencies: '알고리즘 설계 능력, 프로그래밍 능력, 데이터 분석 능력.',
+                                ruralAdmission: '카이스트는 일반 대학과는 다른 특수목적대학으로, 농어촌 특별전형 대신 별도의 입학 전형을 운영할 수 있습니다. 5등급제에서도 우수한 학업 성취도와 잠재력을 보여주는 것이 중요하며, 정확한 자격 요건과 평가 기준은 카이스트 입학처 홈페이지에서 최신 모집 요강을 반드시 확인하시거나, 입학처에 직접 문의해야 합니다.'
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'uni3',
+                name: '한양대학교',
+                departments: [
+                    {
+                        id: 'dept3_1',
+                        name: '미래자동차공학과',
+                        prepInfo: {
+                            intro: '한양대학교 미래자동차공학과는 자동차 산업의 패러다임 변화에 맞춰 전기차, 자율주행차, 커넥티드카 등 미래 모빌리티 기술을 선도하는 전문 인력을 양성합니다.',
+                            curriculum: '주요 과목: 자동차 구조 및 설계, 전기자동차 공학, 자율주행 시스템, 차량 네트워크, 배터리 공학, 신소재 공학, 인공지능 및 빅데이터.',
+                            career: '졸업 후 진로: 현대자동차, 기아, GM, 폭스바겐 등 국내외 완성차 기업; 현대모비스, 콘티넨탈, 보쉬 등 자동차 부품 기업; LG전자 (VS사업본부), 삼성전자 (전장사업팀) 등 IT 기업의 전장 부문; 자율주행 및 모빌리티 서비스 스타트업; 한국생산기술연구원, 한국에너지기술연구원 등 연구소. 주요 직무는 차량 시스템 개발, 전장 제어, 배터리 및 충전 기술 개발, 자율주행 알고리즘 개발, 차량용 소프트웨어 개발 등입니다.',
+                            averageSalary: '초봉 4,800만원 이상, 경력에 따라 6,500만원 ~ 9,000만원 이상 (완성차/부품 기업 기준)',
+                            admissionGuide: {
+                                subjects: '수학, 물리학, 화학, 정보 과목의 기초가 튼튼해야 합니다.',
+                                activities: '자동차 관련 동아리, 공학 프로젝트, 과학 실험 보고서 작성, 관련 분야 인턴십.',
+                                competencies: '실험 설계 능력, 문제 해결 능력, 팀워크, 의사소통 능력.',
+                                ruralAdmission: '한양대학교 농어촌 특별전형은 일반 전형보다 내신 등급 컷이 다소 낮게 형성될 수 있습니다. 5등급제에서는 대략 1등급 중후반에서 2등급 초반까지의 내신 성적이 합격권에 들 수 있으나, 이는 매년 변동이 크므로 한양대학교 입학처 홈페이지의 수시 모집 요강을 통해 가장 최신의 합격자 내신 등급(평균 또는 최저)을 확인하는 것이 중요합니다.'
+                            }
+                        }
+                    }
+                ]
+            }
+        ];
+
+        // DOM 요소 가져오기
+        const universityListView = document.getElementById('university-list-view');
+        const departmentDetailView = document.getElementById('department-detail-view');
+        const universitiesContainer = document.getElementById('universities-container');
+        const backButton = document.getElementById('back-button');
+
+        const departmentNameElem = document.getElementById('department-name');
+        const universityNameDetailElem = document.getElementById('university-name-detail');
+        const deptIntroElem = document.getElementById('dept-intro');
+        const deptCurriculumElem = document.getElementById('dept-curriculum');
+        const deptCareerElem = document.getElementById('dept-career');
+        const deptAverageSalaryElem = document.getElementById('dept-average-salary'); // 평균 급여 요소 추가
+        const guideSubjectsElem = document.getElementById('guide-subjects');
+        const guideActivitiesElem = document.getElementById('guide-activities');
+        const guideCompetenciesElem = document.getElementById('guide-competencies');
+        const guideRuralAdmissionElem = document.getElementById('guide-rural-admission'); // 농어촌 특별전형 요소
+
+        // 대학 목록 렌더링 함수
+        function renderUniversityList() {
+            universitiesContainer.innerHTML = ''; // 기존 내용 초기화
+            universitiesData.forEach(uni => {
+                const uniCard = document.createElement('div');
+                uniCard.className = 'bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-102 border-2 border-gray-100 hover:border-blue-300';
+                uniCard.innerHTML = `
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">${uni.name}</h3>
+                    <p class="text-gray-600">${uni.departments.length}개 학과 정보</p>
+                    <div class="mt-4">
+                        ${uni.departments.map(dept => `
+                            <button data-uni-id="${uni.id}" data-dept-id="${dept.id}"
+                                class="department-button w-full text-left bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium py-2 px-4 rounded-lg mb-2 transition duration-200 ease-in-out transform hover:scale-105">
+                                ${dept.name}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                universitiesContainer.appendChild(uniCard);
+            });
+
+            // 학과 버튼에 이벤트 리스너 추가
+            document.querySelectorAll('.department-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const uniId = event.target.dataset.uniId;
+                    const deptId = event.target.dataset.deptId;
+                    showDepartmentDetail(uniId, deptId);
+                });
+            });
+        }
+
+        // 학과 상세 정보 표시 함수
+        function showDepartmentDetail(uniId, deptId) {
+            const university = universitiesData.find(u => u.id === uniId);
+            const department = university.departments.find(d => d.id === deptId);
+
+            if (university && department) {
+                departmentNameElem.textContent = department.name;
+                universityNameDetailElem.textContent = university.name;
+                deptIntroElem.textContent = department.prepInfo.intro;
+                deptCurriculumElem.textContent = department.prepInfo.curriculum;
+                deptCareerElem.textContent = department.prepInfo.career;
+                // 평균 급여 정보 설정
+                deptAverageSalaryElem.textContent = department.prepInfo.averageSalary;
+                guideSubjectsElem.textContent = department.prepInfo.admissionGuide.subjects;
+                guideActivitiesElem.textContent = department.prepInfo.admissionGuide.activities;
+                guideCompetenciesElem.textContent = department.prepInfo.admissionGuide.competencies;
+                // 농어촌 특별전형 정보 설정
+                guideRuralAdmissionElem.textContent = department.prepInfo.admissionGuide.ruralAdmission;
+
+                universityListView.classList.add('hidden');
+                departmentDetailView.classList.remove('hidden');
+            } else {
+                console.error('University or Department not found.');
+                // Optionally, show a user-friendly error message
+            }
+        }
+
+        // 뒤로가기 버튼 이벤트 리스너
+        backButton.addEventListener('click', () => {
+            departmentDetailView.classList.add('hidden');
+            universityListView.classList.remove('hidden');
+        });
+
+        // 페이지 로드 시 대학 목록 렌더링
+        window.onload = renderUniversityList;
+    </script>
+</body>
+</html>
